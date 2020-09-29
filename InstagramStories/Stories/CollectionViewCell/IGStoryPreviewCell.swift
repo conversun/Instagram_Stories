@@ -93,7 +93,8 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
                                     startPlayer(videoView: videoView, with: snap.url)
                                 }
                             }
-                            storyHeaderView.lastUpdatedLabel.text = snap.lastUpdated
+                            let date = Date(timeIntervalSince1970: TimeInterval(snap.lastUpdated.int ?? 0))
+                            storyHeaderView.lastUpdatedLabel.text = date.timeString(ofStyle: .short)
                         }
                 }
                 case .backward:
@@ -112,7 +113,8 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
                                     self.startPlayer(videoView: videoView, with: snap.url)
                                 }
                             }
-                            storyHeaderView.lastUpdatedLabel.text = snap.lastUpdated
+                            let date = Date(timeIntervalSince1970: TimeInterval(snap.lastUpdated.int ?? 0))
+                            storyHeaderView.lastUpdatedLabel.text = date.timeString(ofStyle: .short)
                         }
                 }
             }

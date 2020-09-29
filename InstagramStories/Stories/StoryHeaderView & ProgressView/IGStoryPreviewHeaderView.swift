@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FlexLayout
+import PinLayout
 
 protocol StoryPreviewHeaderProtocol:class {func didTapCloseButton()}
 
@@ -29,10 +31,10 @@ final class IGStoryPreviewHeaderView: UIView {
     fileprivate var progressView: UIView?
     internal let snaperImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = imageView.frame.height/2
+        imageView.layer.cornerRadius = 23
         imageView.clipsToBounds = true
-        imageView.layer.borderWidth = 1.0
-        imageView.layer.borderColor = UIColor.white.cgColor
+//        imageView.layer.borderWidth = 1.0
+//        imageView.layer.borderColor = UIColor.white.cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -42,15 +44,15 @@ final class IGStoryPreviewHeaderView: UIView {
         return view
     }()
     private let snaperNameLabel: UILabel = {
-        let label = UILabel()
+        let label = UILabel().font(13)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         return label
     }()
     internal let lastUpdatedLabel: UILabel = {
-        let label = UILabel()
+        let label = UILabel().font(11)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.textColor = UIColor.white.withAlphaComponent(0.5)
         return label
     }()
     private lazy var closeButton: UIButton = {
@@ -105,49 +107,46 @@ final class IGStoryPreviewHeaderView: UIView {
         
         //Setting constraints for snapperImageView
         NSLayoutConstraint.activate([
-            snaperImageView.widthAnchor.constraint(equalToConstant: 40),
-            snaperImageView.heightAnchor.constraint(equalToConstant: 40),
-            snaperImageView.igLeftAnchor.constraint(equalTo: self.igLeftAnchor, constant: 10),
-            snaperImageView.igCenterYAnchor.constraint(equalTo: self.igCenterYAnchor),
-            detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 10)
+            snaperImageView.widthAnchor.constraint(equalToConstant: 46),
+            snaperImageView.heightAnchor.constraint(equalToConstant: 46),
+            snaperImageView.igTopAnchor.constraint(equalTo: pv.igBottomAnchor, constant: 16),
+            snaperImageView.igLeftAnchor.constraint(equalTo: self.igLeftAnchor, constant: 16),
+//            snaperImageView.igCenterYAnchor.constraint(equalTo: self.igCenterYAnchor),
+            detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 16)
             ])
         layoutIfNeeded() //To make snaperImageView round. Adding this to somewhere else will create constraint warnings.
         
         //Setting constraints for detailView
         NSLayoutConstraint.activate([
-            detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 10),
+            detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 16),
             detailView.igCenterYAnchor.constraint(equalTo: snaperImageView.igCenterYAnchor),
-            detailView.heightAnchor.constraint(equalToConstant: 40),
-            closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 10)
+            detailView.heightAnchor.constraint(equalToConstant: 46),
+            closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 16)
             ])
         
         //Setting constraints for closeButton
         NSLayoutConstraint.activate([
-            closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 10),
+            closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 16),
             closeButton.igCenterYAnchor.constraint(equalTo: self.igCenterYAnchor),
             closeButton.igRightAnchor.constraint(equalTo: self.igRightAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: 60),
-            closeButton.heightAnchor.constraint(equalToConstant: 80)
+            closeButton.widthAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: 44)
             ])
         
         //Setting constraints for snapperNameLabel
         NSLayoutConstraint.activate([
-            snaperNameLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
-            lastUpdatedLabel.igLeftAnchor.constraint(equalTo: snaperNameLabel.igRightAnchor, constant: 10.0),
-            snaperNameLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 100),
-            snaperNameLabel.igCenterYAnchor.constraint(equalTo: detailView.igCenterYAnchor)
+            snaperNameLabel.igTopAnchor.constraint(equalTo: detailView.igTopAnchor, constant: 4),
             ])
         
         //Setting constraints for lastUpdatedLabel
         NSLayoutConstraint.activate([
-            lastUpdatedLabel.igCenterYAnchor.constraint(equalTo: detailView.igCenterYAnchor),
-            lastUpdatedLabel.igLeftAnchor.constraint(equalTo: snaperNameLabel.igRightAnchor, constant:10.0)
+            lastUpdatedLabel.igBottomAnchor.constraint(equalTo: detailView.igBottomAnchor, constant: -4),
             ])
     }
     private func applyShadowOffset() {
         layer.masksToBounds = false
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.5
+        layer.shadowOpacity = 0.3
         layer.shadowOffset = CGSize(width: -1, height: 1)
         layer.shadowRadius = 1
     }
