@@ -12,11 +12,12 @@ public enum MimeType: String {
     case video
     case unknown
 }
-public class IGSnap: Codable {
+public struct IGSnap: Codable {
     public let internalIdentifier: String
     public let mimeType: String
     public let lastUpdated: String
     public let url: String
+    
     // Store the deleted snaps id in NSUserDefaults, so that when app get relaunch deleted snaps will not display.
     public var isDeleted: Bool {
         set{

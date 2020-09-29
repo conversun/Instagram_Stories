@@ -7,19 +7,14 @@
 
 import Foundation
 
-public class IGStory: Codable {
+public struct IGStory: Codable {
     // Note: To retain lastPlayedSnapIndex value for each story making this type as class
+    
     public var snapsCount: Int {
         return snaps.count
     }
     
-    // To hold the json snaps.
-    private var _snaps: [IGSnap]
-    
-    // To carry forwarding non-deleted snaps.
-    public var snaps: [IGSnap] {
-        return _snaps.filter{!($0.isDeleted)}
-    }
+    public var snaps: [IGSnap]
     public var internalIdentifier: String
     public var lastUpdated: Int
     public var user: IGUser
@@ -28,8 +23,8 @@ public class IGStory: Codable {
     var isCancelledAbruptly = false
     
     enum CodingKeys: String, CodingKey {
-        //case snapsCount = "snaps_count"
-        case _snaps = "snaps"
+//        case snapsCount = "snaps_count"
+        case snaps = "snaps"
         case internalIdentifier = "id"
         case lastUpdated = "last_updated"
         case user = "user"

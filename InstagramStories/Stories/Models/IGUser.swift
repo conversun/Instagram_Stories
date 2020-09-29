@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class IGUser: Codable {
+public struct IGUser: Codable {
     public let internalIdentifier: String
     public let name: String
     public let picture: String
