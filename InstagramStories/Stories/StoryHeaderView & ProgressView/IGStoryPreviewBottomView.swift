@@ -31,6 +31,9 @@ class IGStoryPreviewBottomView: UIView {
         }
     }
     
+    var willShow: (() -> Void)?
+    var willHide: (() -> Void)?
+    
     func observer() {
         share.rx
             .tap
@@ -41,7 +44,9 @@ class IGStoryPreviewBottomView: UIView {
                 switch self.snap?.kind {
                 case .image:
                     guard let url = url.url else { return }
+                    HUD.show()
                     KingfisherManager.shared.retrieveImage(with: ImageResource(downloadURL: url)) { result in
+                        HUD.hide()
                         switch result {
                         case let .success(response):
                             let visibleVC = UIApplication.rootController?.visibleVC
@@ -57,7 +62,10 @@ class IGStoryPreviewBottomView: UIView {
                         }
                     }
                 case .video:
+                    
+                    HUD.show()
                     IGVideoCacheManager.shared.getFile(for: url) { result in
+                        HUD.hide()
                         switch result {
                         case let .success(response):
                             let visibleVC = UIApplication.rootController?.visibleVC
@@ -90,6 +98,7 @@ class IGStoryPreviewBottomView: UIView {
                     switch self.snap?.kind {
                     case .image:
                         guard let url = url.url else { return }
+                        HUD.show()
                         KingfisherManager.shared.retrieveImage(with: ImageResource(downloadURL: url)) { result in
                             switch result {
                             case let .success(response):
@@ -109,6 +118,7 @@ class IGStoryPreviewBottomView: UIView {
                             }
                         }
                     case .video:
+                        HUD.show()
                         IGVideoCacheManager.shared.getFile(for: url) { result in
                             switch result {
                             case let .success(response):
