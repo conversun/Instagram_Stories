@@ -34,6 +34,13 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+    
+    private lazy var storyBottomView: IGStoryPreviewBottomView = {
+        let v = IGStoryPreviewBottomView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
     private lazy var longPress_gesture: UILongPressGestureRecognizer = {
         let lp = UILongPressGestureRecognizer.init(target: self, action: #selector(didLongPress(_:)))
         lp.minimumPressDuration = 0.2
@@ -95,6 +102,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
                             }
                             let date = Date(timeIntervalSince1970: TimeInterval(snap.lastUpdated.int ?? 0))
                             storyHeaderView.lastUpdatedLabel.text = date.timeString(ofStyle: .short)
+                            storyBottomView.snap = snap
                         }
                 }
                 case .backward:
@@ -115,6 +123,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
                             }
                             let date = Date(timeIntervalSince1970: TimeInterval(snap.lastUpdated.int ?? 0))
                             storyHeaderView.lastUpdatedLabel.text = date.timeString(ofStyle: .short)
+                            storyBottomView.snap = snap
                         }
                 }
             }
@@ -156,6 +165,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         scrollview.backgroundColor = .black
         contentView.addSubview(scrollview)
         contentView.addSubview(storyHeaderView)
+        contentView.addSubview(storyBottomView)
         scrollview.addGestureRecognizer(longPress_gesture)
         scrollview.addGestureRecognizer(tap_gesture)
     }
@@ -175,6 +185,14 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             storyHeaderView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
             storyHeaderView.heightAnchor.constraint(equalToConstant: 80)
         ])
+        
+        NSLayoutConstraint.activate([
+            storyBottomView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
+            contentView.igRightAnchor.constraint(equalTo: storyBottomView.igRightAnchor),
+            storyBottomView.igBottomAnchor.constraint(equalTo: contentView.igBottomAnchor),
+            storyBottomView.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        
     }
     private func createSnapView() -> UIImageView {
         let snapView = UIImageView()

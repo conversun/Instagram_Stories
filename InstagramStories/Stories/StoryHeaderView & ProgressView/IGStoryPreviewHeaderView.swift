@@ -136,11 +136,13 @@ final class IGStoryPreviewHeaderView: UIView {
         //Setting constraints for snapperNameLabel
         NSLayoutConstraint.activate([
             snaperNameLabel.igTopAnchor.constraint(equalTo: detailView.igTopAnchor, constant: 4),
+            snaperNameLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
             ])
         
         //Setting constraints for lastUpdatedLabel
         NSLayoutConstraint.activate([
             lastUpdatedLabel.igBottomAnchor.constraint(equalTo: detailView.igBottomAnchor, constant: -4),
+            lastUpdatedLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
             ])
     }
     private func applyShadowOffset() {
