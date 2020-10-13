@@ -1,6 +1,5 @@
 //
 //  IGStoryPreviewController.swift
-//  InstagramStories
 //
 //  Created by Boominadha Prakash on 06/09/17.
 //  Copyright © 2017 DrawRect. All rights reserved.
@@ -53,7 +52,7 @@ final class IGStoryPreviewController: UIViewController, UIGestureRecognizerDeleg
         return self._view.snapsCollectionView.cellForItem(at: indexPath) as? IGStoryPreviewCell
     }
     lazy private var actionSheetController: UIAlertController = {
-        let alertController = UIAlertController(title: "Instagram Stories", message: "More Options", preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: "In\("stagr")am Stories", message: "More Options", preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             self?.deleteSnap()
         }

@@ -1,6 +1,5 @@
 //
 //  IGVideoCacheManager.swift
-//  InstagramStories
 //
 //  Created by Boominadha Prakash on 26/07/19.
 //  Copyright © 2019 DrawRect. All rights reserved.

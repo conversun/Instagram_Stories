@@ -1,6 +1,5 @@
 //
 //  IGStoryPreviewModel.swift
-//  InstagramStories
 //
 //  Created by Boominadha Prakash on 18/03/18.
 //  Copyright © 2018 DrawRect. All rights reserved.

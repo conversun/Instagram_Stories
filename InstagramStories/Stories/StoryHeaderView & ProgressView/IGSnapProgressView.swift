@@ -1,6 +1,5 @@
 //
 //  IGSnapProgressView.swift
-//  InstagramStories
 //
 //  Created by Ranjith Kumar on 9/15/17.
 //  Copyright © 2017 DrawRect. All rights reserved.

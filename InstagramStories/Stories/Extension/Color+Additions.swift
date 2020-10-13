@@ -1,6 +1,5 @@
 //
 //  Color+Additions.swift
-//  InstagramStories
 //
 //  Created by Ranjith Kumar on 9/8/17.
 //  Copyright © 2017 DrawRect. All rights reserved.
