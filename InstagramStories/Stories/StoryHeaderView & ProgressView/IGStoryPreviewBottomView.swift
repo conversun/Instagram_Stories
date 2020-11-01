@@ -12,6 +12,7 @@ import RxCocoa
 import RxSwift
 import Photos
 import Kingfisher
+import UIKit
 
 class IGStoryPreviewBottomView: UIView {
     
