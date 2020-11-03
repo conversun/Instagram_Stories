@@ -70,9 +70,11 @@ final class IGStoryPreviewController: UIViewController, UIGestureRecognizerDeleg
         view = IGStoryPreviewView.init(layoutType: self.layoutType)
         viewModel = IGStoryPreviewModel.init(self.stories, self.handPickedStoryIndex)
         _view.snapsCollectionView.decelerationRate = .fast
-        dismissGesture.delegate = self
-        dismissGesture.addTarget(self, action: #selector(didSwipeDown(_:)))
-        _view.snapsCollectionView.addGestureRecognizer(dismissGesture)
+        if #available(iOS 13, *) { } else {
+            dismissGesture.delegate = self
+            dismissGesture.addTarget(self, action: #selector(didSwipeDown(_:)))
+            _view.snapsCollectionView.addGestureRecognizer(dismissGesture)
+        }
         
         // This should be handled for only currently logged in user story and not for all other user stories.
 //        if(isDeleteSnapEnabled) {
@@ -252,11 +254,11 @@ extension IGStoryPreviewController: UICollectionViewDelegateFlowLayout {
                 strongSelf.isTransitioning = false
             }
         }
-        if #available(iOS 11.0, *) {
-            return CGSize(width: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.width, height: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.height)
-        } else {
+//        if #available(iOS 11.0, *) {
+//            return CGSize(width: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.width, height: _view.snapsCollectionView.safeAreaLayoutGuide.layoutFrame.height)
+//        } else {
             return CGSize(width: _view.snapsCollectionView.frame.width, height: _view.snapsCollectionView.frame.height)
-        }
+//        }
     }
 }
 

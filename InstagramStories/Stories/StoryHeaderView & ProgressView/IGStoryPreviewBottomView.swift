@@ -25,6 +25,7 @@ class IGStoryPreviewBottomView: UIView {
         .isUserInteractionEnabled(false)
     let share = UIButton()
         .image("ic_repost_userprofile")
+    let bgView = UIView()
     
     public var snap: IGSnap? {
         didSet {
@@ -155,7 +156,7 @@ class IGStoryPreviewBottomView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        [download, downloadVip, share]
+        [bgView, download, downloadVip, share]
             .forEach { $0.adhere(toSuperview: self) }
         observer()
         
@@ -164,9 +165,14 @@ class IGStoryPreviewBottomView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        share.pin.bottomRight(8).size(44)
+        bgView.pin.left().right().bottom().height(44 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0))
+        
+        share.pin.right(8).bottom(8 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0)).size(44)
         download.pin.before(of: share, aligned: .center).size(44).marginRight(8)
         downloadVip.pin.sizeToFit().before(of: share, aligned: .top).marginRight(-6)
+        
+        bgView.gradientVertical(.clear, UIColor.black.withAlphaComponent(0.5))
+        
     }
     
     required init?(coder: NSCoder) {

@@ -8,6 +8,7 @@
 import UIKit
 import FlexLayout
 import PinLayout
+import SwiftyInsta
 
 protocol StoryPreviewHeaderProtocol:class {func didTapCloseButton()}
 
@@ -28,45 +29,45 @@ final class IGStoryPreviewHeaderView: UIView {
         }
     }
     fileprivate var progressView: UIView?
-    internal let snaperImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 23
-        imageView.clipsToBounds = true
-//        imageView.layer.borderWidth = 1.0
-//        imageView.layer.borderColor = UIColor.white.cgColor
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    private let detailView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    private let snaperNameLabel: UILabel = {
-        let label = UILabel().font(13)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        return label
-    }()
-    internal let lastUpdatedLabel: UILabel = {
-        let label = UILabel().font(11)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.white.withAlphaComponent(0.5)
-        return label
-    }()
-    private lazy var closeButton: UIButton = {
+    
+    let snaperImageView = UIImageView()
+        .crop()
+        .cornerRadius(23)
+    let detailView = UIView()
+    
+    let snaperNameLabel = UILabel()
+        .font(13)
+        .color(.white)
+        .isUserInteractionEnabled(false)
+    
+    let lastUpdatedLabel = UILabel()
+        .font(11)
+        .color(UIColor.white.withAlphaComponent(0.5))
+        .isUserInteractionEnabled(false)
+    
+    lazy var closeButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(#imageLiteral(resourceName: "ic_close_userprofile"), for: .normal)
         button.addTarget(self, action: #selector(didTapClose(_:)), for: .touchUpInside)
         return button
     }()
+    
+    let leftControl = UIControl()
+    
+    let bgView = UIView()
+    
+    let forever = LoadingButton()
+        .hidden()
+        .titleColor(.white)
+        .font(12)
+        .cornerRadius(4)
+        .backgroundColor(UIColor.white.withAlphaComponent(0.3))
+
     public var getProgressView: UIView {
         if let progressView = self.progressView {
             return progressView
         }
         let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
         self.progressView = v
         self.addSubview(self.getProgressView)
         return v
@@ -76,7 +77,7 @@ final class IGStoryPreviewHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame = frame
-        applyShadowOffset()
+//        applyShadowOffset()
         loadUIElements()
         installLayoutConstraints()
     }
@@ -87,62 +88,103 @@ final class IGStoryPreviewHeaderView: UIView {
     //MARK: - Private functions
     private func loadUIElements(){
         backgroundColor = .clear
+        addSubview(bgView)
         addSubview(getProgressView)
-        addSubview(snaperImageView)
-        addSubview(detailView)
-        detailView.addSubview(snaperNameLabel)
-        detailView.addSubview(lastUpdatedLabel)
         addSubview(closeButton)
+        addSubview(detailView)
+        
+        forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
+        leftControl.addTarget(self, action: #selector(leftControlAction), for: .touchUpInside)
+        
     }
+    
+    
+    @objc
+    func leftControlAction() {
+        if let user = story?.user.responseUser {
+            let vc = UserDetailVC(user, false)
+            UIApplication.rootController?.visibleVC?.dismiss(animated: true, completion: {
+                UIApplication.rootController?.visibleVC?.present(vc.withNavigation())
+            })
+        }
+    }
+    
+    @objc
+    func foreverAction() {
+        forever.showLoading()
+        if let user = story?.user.responseUser,
+           let forevering = user.friendship?.isWatchedByYou {
+            updateUserStatusSingle(user, forevering: forevering) { [weak self] status in
+                self?.status = status
+            }
+        }
+    }
+    
+    func updateUserStatusSingle(_ user: UserDBProtocol,
+                          forevering: Bool,
+                          requesting: Bool = false,
+                          complete: ((Friendship?) -> Void)? = nil)
+    {
+        guard let userID = user.IGUserId?.int else { return }
+        RefreshRelay.default.updateUserStatus(user, forevering: forevering, requesting: requesting) { result in
+            switch result {
+            case let .success(response):
+                UserListVC.statusList[userID.string] = response.friendshipStatus
+                complete?(response.friendshipStatus)
+            case let .failure(error):
+                error.apiError()
+                complete?(nil)
+            }
+        }
+    }
+    
+    var status: Friendship? {
+        didSet {
+            guard let status = status else { return }
+
+            forever.show()
+            
+            var foreverIng = status.isWatchedByYou
+            let requestIng = status.watchRequestSent
+
+            if requestIng { foreverIng = true }
+
+            forever.hideLoading()
+            if foreverIng {
+                forever.title(requestIng ? NSLocalizedString("Requested", comment: "") :
+                                NSLocalizedString("Unfollow", comment: ""))
+            } else {
+                forever.title(NSLocalizedString("Follow", comment: ""))
+            }
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        bgView.pin.top().left().right().height(44+46)
+        getProgressView.pin.top().left().right(60).height(44)
+        closeButton.pin.top(0).right(8).size(44)
+        detailView.pin.top(44).left().right().height(46)
+        detailView.flex.layout()
+        
+        bgView.gradientVertical(UIColor.black.withAlphaComponent(0.5), .clear)
+        
+    }
+    
     private func installLayoutConstraints(){
-        //Setting constraints for progressView
-        let pv = getProgressView
-        NSLayoutConstraint.activate([
-            pv.igLeftAnchor.constraint(equalTo: self.igLeftAnchor),
-            pv.igTopAnchor.constraint(equalTo: self.igTopAnchor, constant: 8),
-            self.igRightAnchor.constraint(equalTo: pv.igRightAnchor),
-            pv.heightAnchor.constraint(equalToConstant: 10)
-            ])
-        
-        //Setting constraints for snapperImageView
-        NSLayoutConstraint.activate([
-            snaperImageView.widthAnchor.constraint(equalToConstant: 46),
-            snaperImageView.heightAnchor.constraint(equalToConstant: 46),
-            snaperImageView.igTopAnchor.constraint(equalTo: pv.igBottomAnchor, constant: 16),
-            snaperImageView.igLeftAnchor.constraint(equalTo: self.igLeftAnchor, constant: 16),
-//            snaperImageView.igCenterYAnchor.constraint(equalTo: self.igCenterYAnchor),
-            detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 16)
-            ])
-        layoutIfNeeded() //To make snaperImageView round. Adding this to somewhere else will create constraint warnings.
-        
-        //Setting constraints for detailView
-        NSLayoutConstraint.activate([
-            detailView.igLeftAnchor.constraint(equalTo: snaperImageView.igRightAnchor, constant: 16),
-            detailView.igCenterYAnchor.constraint(equalTo: snaperImageView.igCenterYAnchor),
-            detailView.heightAnchor.constraint(equalToConstant: 46),
-            closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 16)
-            ])
-        
-        //Setting constraints for closeButton
-        NSLayoutConstraint.activate([
-            closeButton.igLeftAnchor.constraint(equalTo: detailView.igRightAnchor, constant: 16),
-            closeButton.igCenterYAnchor.constraint(equalTo: self.igCenterYAnchor),
-            closeButton.igRightAnchor.constraint(equalTo: self.igRightAnchor),
-            closeButton.widthAnchor.constraint(equalToConstant: 44),
-            closeButton.heightAnchor.constraint(equalToConstant: 44)
-            ])
-        
-        //Setting constraints for snapperNameLabel
-        NSLayoutConstraint.activate([
-            snaperNameLabel.igTopAnchor.constraint(equalTo: detailView.igTopAnchor, constant: 4),
-            snaperNameLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
-            ])
-        
-        //Setting constraints for lastUpdatedLabel
-        NSLayoutConstraint.activate([
-            lastUpdatedLabel.igBottomAnchor.constraint(equalTo: detailView.igBottomAnchor, constant: -4),
-            lastUpdatedLabel.igLeftAnchor.constraint(equalTo: detailView.igLeftAnchor),
-            ])
+        detailView.flex.direction(.row).justifyContent(.spaceBetween).alignItems(.center)
+            .paddingHorizontal(16).define {
+                $0.addItem(leftControl).direction(.row).grow(1).define {
+                    $0.addItem(snaperImageView).size(46)
+                    $0.addItem(UIView().isUserInteractionEnabled(false))
+                        .direction(.column).grow(1).justifyContent(.spaceBetween)
+                        .padding(4, 16, 4, 16).define {
+                            $0.addItem(snaperNameLabel)
+                            $0.addItem(lastUpdatedLabel)
+                        }
+                }
+                $0.addItem(forever).width(72).height(26)
+            }
     }
     private func applyShadowOffset() {
         layer.masksToBounds = false
@@ -183,7 +225,7 @@ final class IGStoryPreviewHeaderView: UIView {
     }
     public func createSnapProgressors(){
         print("Progressor count: \(getProgressView.subviews.count)")
-        let padding: CGFloat = 8 //GUI-Padding
+        let padding: CGFloat = 10 //GUI-Padding
         let height: CGFloat = 3
         var pvIndicatorArray: [IGSnapProgressIndicatorView] = []
         var pvArray: [IGSnapProgressView] = []
@@ -225,7 +267,7 @@ final class IGStoryPreviewHeaderView: UIView {
                     pvIndicator.widthConstraint!
                     ])
                 if index == pvIndicatorArray.count-1 {
-                    pvIndicator.rightConstraiant = self.igRightAnchor.constraint(equalTo: pvIndicator.igRightAnchor, constant: padding)
+                    pvIndicator.rightConstraiant = self.igRightAnchor.constraint(equalTo: pvIndicator.igRightAnchor, constant: 56)
                     pvIndicator.rightConstraiant!.isActive = true
                 }
             }
@@ -243,5 +285,9 @@ final class IGStoryPreviewHeaderView: UIView {
                 ])
         }
         snaperNameLabel.text = story?.user.name
+        if let user = story?.user.responseUser,
+           let userID = user.IGUserId {
+            self.status = UserListVC.statusList[userID] ?? user.friendship
+        }
     }
 }

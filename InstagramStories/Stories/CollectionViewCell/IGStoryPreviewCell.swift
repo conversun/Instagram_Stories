@@ -174,7 +174,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             scrollview.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
             contentView.igRightAnchor.constraint(equalTo: scrollview.igRightAnchor),
             scrollview.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
-            contentView.igBottomAnchor.constraint(equalTo: scrollview.igBottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollview.bottomAnchor),
             scrollview.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.0),
             scrollview.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1.0)
         ])
@@ -182,14 +182,14 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             storyHeaderView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
             contentView.igRightAnchor.constraint(equalTo: storyHeaderView.igRightAnchor),
             storyHeaderView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
-            storyHeaderView.heightAnchor.constraint(equalToConstant: 80)
+            storyHeaderView.heightAnchor.constraint(equalToConstant: 90)
         ])
         
         NSLayoutConstraint.activate([
             storyBottomView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
             contentView.igRightAnchor.constraint(equalTo: storyBottomView.igRightAnchor),
-            storyBottomView.igBottomAnchor.constraint(equalTo: contentView.igBottomAnchor),
-            storyBottomView.heightAnchor.constraint(equalToConstant: 44)
+            storyBottomView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            storyBottomView.heightAnchor.constraint(equalToConstant: 44 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0))
         ])
         
     }
@@ -214,7 +214,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             snapView.igTopAnchor.constraint(equalTo: scrollview.igTopAnchor),
             snapView.widthAnchor.constraint(equalTo: scrollview.widthAnchor),
             snapView.heightAnchor.constraint(equalTo: scrollview.heightAnchor),
-            scrollview.igBottomAnchor.constraint(equalTo: snapView.igBottomAnchor)
+            scrollview.bottomAnchor.constraint(equalTo: snapView.bottomAnchor)
         ])
         if(snapIndex != 0) {
             NSLayoutConstraint.activate([
@@ -249,7 +249,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             videoView.igTopAnchor.constraint(equalTo: scrollview.igTopAnchor),
             videoView.widthAnchor.constraint(equalTo: scrollview.widthAnchor),
             videoView.heightAnchor.constraint(equalTo: scrollview.heightAnchor),
-            scrollview.igBottomAnchor.constraint(equalTo: videoView.igBottomAnchor)
+            scrollview.bottomAnchor.constraint(equalTo: videoView.bottomAnchor)
         ])
         if(snapIndex != 0) {
             NSLayoutConstraint.activate([

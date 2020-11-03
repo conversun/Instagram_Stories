@@ -33,6 +33,7 @@ class IGStoryPreviewView: UIView {
     }()
     lazy var snapsCollectionView: UICollectionView! = {
         let cv = UICollectionView.init(frame: CGRect(x: 0,y: 0,width: UIScreen.main.bounds.width,height:  UIScreen.main.bounds.height), collectionViewLayout: snapsCollectionViewFlowLayout)
+        cv.contentInsetAdjustmentBehavior = .never
         cv.backgroundColor = .black
         cv.showsVerticalScrollIndicator = false
         cv.showsHorizontalScrollIndicator = false
@@ -63,12 +64,19 @@ class IGStoryPreviewView: UIView {
         backgroundColor = .black
         addSubview(snapsCollectionView)
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        snapsCollectionViewFlowLayout.itemSize = bounds.size
+        snapsCollectionView.frame = bounds
+    }
+    
     private func installLayoutConstraints(){
         //Setting constraints for snapsCollectionview
-        NSLayoutConstraint.activate([
-            igLeftAnchor.constraint(equalTo: snapsCollectionView.igLeftAnchor),
-            igTopAnchor.constraint(equalTo: snapsCollectionView.igTopAnchor),
-            snapsCollectionView.igRightAnchor.constraint(equalTo: igRightAnchor),
-            snapsCollectionView.igBottomAnchor.constraint(equalTo: igBottomAnchor)])
+//        NSLayoutConstraint.activate([
+//            igLeftAnchor.constraint(equalTo: snapsCollectionView.igLeftAnchor),
+//            igTopAnchor.constraint(equalTo: snapsCollectionView.igTopAnchor),
+//            snapsCollectionView.igRightAnchor.constraint(equalTo: igRightAnchor),
+//            snapsCollectionView.igBottomAnchor.constraint(equalTo: igBottomAnchor)])
     }
 }
