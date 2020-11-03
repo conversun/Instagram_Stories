@@ -114,9 +114,9 @@ class IGStoryPreviewBottomView: UIView {
                                 }) { success, _ in
                                     DispatchQueue.main.async {
                                         if success {
-                                            HUD.success("Save Successful")
+                                            HUD.success(NSLocalizedString("Successfully saved", comment: ""))
                                         } else {
-                                            HUD.error("Save failed")
+                                            HUD.error(NSLocalizedString("Save failed", comment: ""))
                                         }
                                     }
                                 }
@@ -135,9 +135,9 @@ class IGStoryPreviewBottomView: UIView {
                                 }) { success, _ in
                                     DispatchQueue.main.async {
                                         if success {
-                                            HUD.success("Save Successful")
+                                            HUD.success(NSLocalizedString("Successfully saved", comment: ""))
                                         } else {
-                                            HUD.error("Save failed")
+                                            HUD.error(NSLocalizedString("Save failed", comment: ""))
                                         }
                                     }
                                 }
