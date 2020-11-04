@@ -93,6 +93,9 @@ final class IGStoryPreviewHeaderView: UIView {
         addSubview(closeButton)
         addSubview(detailView)
         
+        forever.titleEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
+        forever.titleLabel?.adjustsFontSizeToFitWidth = true
+        
         forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
         leftControl.addTarget(self, action: #selector(leftControlAction), for: .touchUpInside)
         
