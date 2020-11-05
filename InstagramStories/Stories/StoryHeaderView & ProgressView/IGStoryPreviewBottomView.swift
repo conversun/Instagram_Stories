@@ -97,7 +97,7 @@ class IGStoryPreviewBottomView: UIView {
             .tap
             .bind(onNext: { [weak self] in
                 guard let `self` = self else { return }
-                guard PurchaseManager.default.checkBoost() else { return }
+                guard PurchaseManager.default.checkBoost(source: "StoryPreview") else { return }
                 guard let url = self.snap?.url else { return }
                 
                 UIApplication.rootController?.visibleVC?.photoPermission(block: { allow in
