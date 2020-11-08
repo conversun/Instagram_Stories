@@ -99,6 +99,8 @@ final class IGStoryPreviewHeaderView: UIView {
         forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
         leftControl.addTarget(self, action: #selector(leftControlAction), for: .touchUpInside)
         
+        forever.show(RemoteRelay.default.localConfig.wonderful)
+        
     }
     
     
