@@ -36,6 +36,13 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     private lazy var storyBottomView: IGStoryPreviewBottomView = {
         let v = IGStoryPreviewBottomView()
+        v.needPauseBlock = { [weak self] pause in
+            if pause {
+                self?.pauseEntireSnap()
+            } else {
+                self?.resumeEntireSnap()
+            }
+        }
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -195,6 +202,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     private func createSnapView() -> UIImageView {
         let snapView = UIImageView()
+        snapView.crop()
         snapView.translatesAutoresizingMaskIntoConstraints = false
         snapView.tag = snapIndex + snapViewTagIndicator
         

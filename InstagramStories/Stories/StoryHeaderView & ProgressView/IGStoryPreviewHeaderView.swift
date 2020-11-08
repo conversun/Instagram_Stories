@@ -291,6 +291,7 @@ final class IGStoryPreviewHeaderView: UIView {
         if let user = story?.user.responseUser,
            let userID = user.IGUserId {
             self.status = UserListVC.statusList[userID] ?? user.friendship
+            
         }
     }
 }

@@ -18,6 +18,8 @@ class IGStoryPreviewBottomView: UIView {
     
     var disposeBag = DisposeBag()
     
+    var needPauseBlock: ((Bool) -> Void)?
+    
     let download = UIButton()
         .image("ic_download_userprofile")
     let downloadVip = UIImageView()
@@ -52,6 +54,7 @@ class IGStoryPreviewBottomView: UIView {
                 case .image:
                     guard let url = url.url else { return }
                     HUD.show()
+                    self.needPauseBlock?(true)
                     KingfisherManager.shared.retrieveImage(with: ImageResource(downloadURL: url)) { result in
                         HUD.hide()
                         switch result {
@@ -63,14 +66,19 @@ class IGStoryPreviewBottomView: UIView {
                                 popOver.sourceView = visibleVC?.view
                                 popOver.sourceRect = visibleVC?.view.convert(self.share.frame, from: self.share.superview ?? self.share) ?? self.share.bounds
                             }
+                            vc.completionWithItemsHandler = { _, completed, items, error in
+                                self.needPauseBlock?(false)
+                            }
                             visibleVC?.present(vc, animated: true, completion: nil)
                         case let .failure(error):
+                            self.needPauseBlock?(false)
                             HUD.error(error.localizedDescription)
                         }
                     }
                 case .video:
                     
                     HUD.show()
+                    self.needPauseBlock?(true)
                     IGVideoCacheManager.shared.getFile(for: url) { result in
                         HUD.hide()
                         switch result {
@@ -82,8 +90,12 @@ class IGStoryPreviewBottomView: UIView {
                                 popOver.sourceView = visibleVC?.view
                                 popOver.sourceRect = visibleVC?.view.convert(self.share.frame, from: self.share.superview ?? self.share) ?? self.share.bounds
                             }
+                            vc.completionWithItemsHandler = { _, completed, items, error in
+                                self.needPauseBlock?(false)
+                            }
                             UIApplication.rootController?.visibleVC?.present(vc, animated: true, completion: nil)
                         case let .failure(error):
+                            self.needPauseBlock?(false)
                             HUD.error(error.localizedDescription)
                         }
                     }
@@ -100,8 +112,12 @@ class IGStoryPreviewBottomView: UIView {
                 guard PurchaseManager.default.checkBoost(source: "StoryPreview-Download") else { return }
                 guard let url = self.snap?.url else { return }
                 
+                self.needPauseBlock?(true)
                 UIApplication.rootController?.visibleVC?.photoPermission(block: { allow in
-                    guard allow else { return }
+                    guard allow else {
+                        self.needPauseBlock?(false)
+                        return
+                    }
                     
                     switch self.snap?.kind {
                     case .image:
@@ -113,6 +129,7 @@ class IGStoryPreviewBottomView: UIView {
                                 PHPhotoLibrary.shared().performChanges({
                                     PHAssetChangeRequest.creationRequestForAsset(from: response.image)
                                 }) { success, _ in
+                                    self.needPauseBlock?(false)
                                     DispatchQueue.main.async {
                                         if success {
                                             HUD.success(NSLocalizedString("Successfully saved", comment: ""))
@@ -122,6 +139,7 @@ class IGStoryPreviewBottomView: UIView {
                                     }
                                 }
                             case let .failure(error):
+                                self.needPauseBlock?(false)
                                 HUD.error(error.localizedDescription)
                             }
                         }
@@ -135,6 +153,7 @@ class IGStoryPreviewBottomView: UIView {
                                         .creationRequestForAssetFromVideo(atFileURL: response)
                                 }) { success, _ in
                                     DispatchQueue.main.async {
+                                        self.needPauseBlock?(false)
                                         if success {
                                             HUD.success(NSLocalizedString("Successfully saved", comment: ""))
                                         } else {
@@ -143,6 +162,7 @@ class IGStoryPreviewBottomView: UIView {
                                     }
                                 }
                             case let .failure(error):
+                                self.needPauseBlock?(false)
                                 HUD.error(error.localizedDescription)
                             }
                         }
