@@ -23,7 +23,8 @@ extension IGURLSession {
         guard let url = URL(string: urlString) else {
             return completionBlock(.failure(IGError.invalidImageURL))
         }
-        ImageDownloader.default.downloadImage(with: url, options: [], completionHandler:  { result in
+        
+        KingfisherManager.shared.retrieveImage(with: url, completionHandler: { result in
             switch result {
             case let .success(response):
                 completionBlock(.success(response.image))
