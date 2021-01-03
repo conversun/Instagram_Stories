@@ -47,6 +47,12 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         return v
     }()
     
+    private lazy var storyTipView: IGStoryPreviewTipView = {
+        let v = IGStoryPreviewTipView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
     private lazy var longPress_gesture: UILongPressGestureRecognizer = {
         let lp = UILongPressGestureRecognizer.init(target: self, action: #selector(didLongPress(_:)))
         lp.minimumPressDuration = 0.2
@@ -171,6 +177,9 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         scrollview.backgroundColor = .black
         contentView.addSubview(scrollview)
         contentView.addSubview(storyHeaderView)
+        if BoolCache[.didCloseStoryPriviteTip] != true {
+            contentView.addSubview(storyTipView)
+        }
         contentView.addSubview(storyBottomView)
         scrollview.addGestureRecognizer(longPress_gesture)
         scrollview.addGestureRecognizer(tap_gesture)
@@ -191,6 +200,15 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             storyHeaderView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
             storyHeaderView.heightAnchor.constraint(equalToConstant: 90)
         ])
+        
+        if BoolCache[.didCloseStoryPriviteTip] != true {
+            NSLayoutConstraint.activate([
+                storyTipView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
+                contentView.igRightAnchor.constraint(equalTo: storyTipView.igRightAnchor),
+                storyTipView.igTopAnchor.constraint(equalTo: storyHeaderView.igBottomAnchor, constant: 10),
+                storyTipView.heightAnchor.constraint(equalToConstant: 46)
+            ])            
+        }
         
         NSLayoutConstraint.activate([
             storyBottomView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
