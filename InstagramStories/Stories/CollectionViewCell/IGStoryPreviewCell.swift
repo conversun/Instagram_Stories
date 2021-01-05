@@ -53,6 +53,12 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         return v
     }()
     
+    private lazy var storyBlurView: OpaqueLockView = {
+        let v = OpaqueLockView(.ghostStory, source: "StoryPreview-GhostView")
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
     private lazy var longPress_gesture: UILongPressGestureRecognizer = {
         let lp = UILongPressGestureRecognizer.init(target: self, action: #selector(didLongPress(_:)))
         lp.minimumPressDuration = 0.2
@@ -176,11 +182,27 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         scrollview.isPagingEnabled = true
         scrollview.backgroundColor = .black
         contentView.addSubview(scrollview)
+        contentView.addSubview(storyBottomView)
+        
+        if !PurchaseManager.inSubscription {
+            
+            storyBlurView.purchaseDidSelect = { source in
+                App.topVC()?.dismiss(animated: true, completion: {
+                    PurchaseManager.default.checkBoost(source: source)
+                })
+            }
+            
+            contentView.addSubview(storyBlurView)
+            Timer.after(5.0) { [weak self] in
+                self?.pauseEntireSnap()
+            }
+        }
+        
         contentView.addSubview(storyHeaderView)
         if BoolCache[.didCloseStoryPriviteTip] != true {
             contentView.addSubview(storyTipView)
         }
-        contentView.addSubview(storyBottomView)
+        
         scrollview.addGestureRecognizer(longPress_gesture)
         scrollview.addGestureRecognizer(tap_gesture)
     }
@@ -216,6 +238,17 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             storyBottomView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             storyBottomView.heightAnchor.constraint(equalToConstant: 44 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0))
         ])
+        
+        if !PurchaseManager.inSubscription {
+            NSLayoutConstraint.activate([
+                storyBlurView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
+                contentView.igRightAnchor.constraint(equalTo: storyBlurView.igRightAnchor),
+                storyBlurView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
+                contentView.bottomAnchor.constraint(equalTo: storyBlurView.bottomAnchor),
+                storyBlurView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.0),
+                storyBlurView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1.0)
+            ])
+        }
         
     }
     private func createSnapView() -> UIImageView {

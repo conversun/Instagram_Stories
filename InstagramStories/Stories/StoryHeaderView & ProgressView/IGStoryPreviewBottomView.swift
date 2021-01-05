@@ -22,9 +22,9 @@ class IGStoryPreviewBottomView: UIView {
     
     let download = UIButton()
         .image("ic_download_userprofile")
-    let downloadVip = UIImageView()
-        .image("ic_pro_color")
-        .isUserInteractionEnabled(false)
+//    let downloadVip = UIImageView()
+//        .image("ic_pro_color")
+//        .isUserInteractionEnabled(false)
     let share = UIButton()
         .image("ic_repost_userprofile")
     let bgView = UIView()
@@ -40,9 +40,9 @@ class IGStoryPreviewBottomView: UIView {
     
     func observer() {
         
-        PurchaseManager.default.statusDriver
-            .drive(downloadVip.rx.isHidden)
-            .disposed(by: disposeBag)
+//        PurchaseManager.default.statusDriver
+//            .drive(downloadVip.rx.isHidden)
+//            .disposed(by: disposeBag)
         
         share.rx
             .tap
@@ -176,7 +176,7 @@ class IGStoryPreviewBottomView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        [bgView, download, downloadVip, share]
+        [bgView, download, share]
             .forEach { $0.adhere(toSuperview: self) }
         observer()
         
@@ -189,7 +189,7 @@ class IGStoryPreviewBottomView: UIView {
         
         share.pin.right(8).bottom(8 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0)).size(44)
         download.pin.before(of: share, aligned: .center).size(44).marginRight(8)
-        downloadVip.pin.sizeToFit().before(of: share, aligned: .top).marginRight(-6)
+//        downloadVip.pin.sizeToFit().before(of: share, aligned: .top).marginRight(-6)
         
         bgView.gradientVertical(.clear, UIColor.black.withAlphaComponent(0.5))
         
