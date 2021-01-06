@@ -103,6 +103,8 @@ final class IGStoryPreviewHeaderView: UIView {
         forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
         leftControl.addTarget(self, action: #selector(leftControlAction), for: .touchUpInside)
         
+        forever.show(RemoteRelay.default.localConfig.wonderful)
+        
     }
     
     
@@ -292,7 +294,8 @@ final class IGStoryPreviewHeaderView: UIView {
                 ])
         }
         snaperNameLabel.text = story?.user.name
-        if let user = story?.user.responseUser,
+        if RemoteRelay.default.localConfig.wonderful,
+           let user = story?.user.responseUser,
            let userID = user.IGUserId {
             self.status = UserListVC.statusList[userID] ?? user.friendship
             
