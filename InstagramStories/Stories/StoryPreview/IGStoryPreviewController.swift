@@ -34,6 +34,8 @@ final class IGStoryPreviewController: UIViewController, UIGestureRecognizerDeleg
     private(set) var isTransitioning = false
     private(set) var currentIndexPath: IndexPath?
     
+    var didDisAppearBlock: (() -> Void)?
+    
     private let dismissGesture: UISwipeGestureRecognizer = {
         let gesture = UISwipeGestureRecognizer()
         gesture.direction = .down
@@ -112,6 +114,12 @@ final class IGStoryPreviewController: UIViewController, UIGestureRecognizerDeleg
 //            IGAppUtility.lockOrientation(.all)
 //        }
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        didDisAppearBlock?()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
