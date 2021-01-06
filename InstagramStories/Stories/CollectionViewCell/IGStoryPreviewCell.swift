@@ -147,6 +147,9 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             }
         }
     }
+    
+    var isGhost: Bool = false
+    
     public var story: IGStory? {
         didSet {
             storyHeaderView.story = story
@@ -185,7 +188,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         contentView.addSubview(scrollview)
         contentView.addSubview(storyBottomView)
         
-        if !PurchaseManager.inSubscription {
+        if !PurchaseManager.inSubscription, isGhost {
             
             storyBlurView.purchaseDidSelect = { source in
                 App.topVC()?.dismiss(animated: true, completion: {
@@ -240,7 +243,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             storyBottomView.heightAnchor.constraint(equalToConstant: 44 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0))
         ])
         
-        if !PurchaseManager.inSubscription {
+        if !PurchaseManager.inSubscription, isGhost {
             NSLayoutConstraint.activate([
                 storyBlurView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
                 contentView.igRightAnchor.constraint(equalTo: storyBlurView.igRightAnchor),
