@@ -26,6 +26,10 @@ final class IGStoryPreviewHeaderView: UIView {
     public var story:IGStory? {
         didSet {
             snapsPerStory  = (story?.snapsCount)! < maxSnaps ? (story?.snapsCount)! : maxSnaps
+            
+            forever.show(RemoteRelay.default.localConfig.wonderful
+                            && story?.user.responseUser?.IGUserId != nil
+                            && story?.user.responseUser?.IGUserId != LoginRelay.Current.userID)
         }
     }
     fileprivate var progressView: UIView?
@@ -98,9 +102,6 @@ final class IGStoryPreviewHeaderView: UIView {
         
         forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
         leftControl.addTarget(self, action: #selector(leftControlAction), for: .touchUpInside)
-        
-        forever.show(RemoteRelay.default.localConfig.wonderful
-                        && story?.user.responseUser?.IGUserId != LoginRelay.Current.userID)
         
     }
     

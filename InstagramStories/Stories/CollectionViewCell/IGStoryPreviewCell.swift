@@ -148,7 +148,14 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         }
     }
     
-    var isGhost: Bool = false
+    var isGhost: Bool {
+        
+        return !PurchaseManager.inSubscription
+            && RemoteRelay.default.localConfig.wonderful
+            && story?.user.responseUser?.IGUserId != nil
+            && story?.user.responseUser?.IGUserId != LoginRelay.Current.userID
+        
+    }
     
     public var story: IGStory? {
         didSet {
@@ -157,6 +164,42 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
                 storyHeaderView.snaperImageView.setImage(url: picture)
             }
             StoryRealVC.readCache.insert(story?.user.responseUser?.pk ?? "")
+            
+            if isGhost {
+                
+                storyBlurView.purchaseDidSelect = { source in
+                    App.topVC()?.dismiss(animated: true, completion: {
+                        PurchaseManager.default.checkBoost(source: source)
+                    })
+                }
+                
+                contentView.insertSubview(storyBlurView, belowSubview: storyHeaderView)
+                
+                NSLayoutConstraint.activate([
+                    storyBlurView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
+                    contentView.igRightAnchor.constraint(equalTo: storyBlurView.igRightAnchor),
+                    storyBlurView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
+                    contentView.bottomAnchor.constraint(equalTo: storyBlurView.bottomAnchor),
+                    storyBlurView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.0),
+                    storyBlurView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1.0)
+                ])
+                
+                Timer.after(5.0) { [weak self] in
+                    self?.pauseEntireSnap()
+                }
+                
+                if BoolCache[.didCloseStoryPriviteTip] != true {
+                    contentView.insertSubview(storyTipView, aboveSubview: storyHeaderView)
+                    NSLayoutConstraint.activate([
+                        storyTipView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
+                        contentView.igRightAnchor.constraint(equalTo: storyTipView.igRightAnchor),
+                        storyTipView.igTopAnchor.constraint(equalTo: storyHeaderView.igBottomAnchor, constant: 10),
+                        storyTipView.heightAnchor.constraint(equalToConstant: 46)
+                    ])
+                }
+                
+            }
+            
         }
     }
     
@@ -188,24 +231,20 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         contentView.addSubview(scrollview)
         contentView.addSubview(storyBottomView)
         
-        if !PurchaseManager.inSubscription, isGhost {
-            
-            storyBlurView.purchaseDidSelect = { source in
-                App.topVC()?.dismiss(animated: true, completion: {
-                    PurchaseManager.default.checkBoost(source: source)
-                })
-            }
-            
-            contentView.addSubview(storyBlurView)
-            Timer.after(5.0) { [weak self] in
-                self?.pauseEntireSnap()
-            }
-        }
+//        if isGhost {
+//            storyBlurView.purchaseDidSelect = { source in
+//                App.topVC()?.dismiss(animated: true, completion: {
+//                    PurchaseManager.default.checkBoost(source: source)
+//                })
+//            }
+//
+//            contentView.addSubview(storyBlurView)
+//            Timer.after(5.0) { [weak self] in
+//                self?.pauseEntireSnap()
+//            }
+//        }
         
         contentView.addSubview(storyHeaderView)
-        if BoolCache[.didCloseStoryPriviteTip] != true {
-            contentView.addSubview(storyTipView)
-        }
         
         scrollview.addGestureRecognizer(longPress_gesture)
         scrollview.addGestureRecognizer(tap_gesture)
@@ -227,15 +266,6 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             storyHeaderView.heightAnchor.constraint(equalToConstant: 90)
         ])
         
-        if BoolCache[.didCloseStoryPriviteTip] != true {
-            NSLayoutConstraint.activate([
-                storyTipView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
-                contentView.igRightAnchor.constraint(equalTo: storyTipView.igRightAnchor),
-                storyTipView.igTopAnchor.constraint(equalTo: storyHeaderView.igBottomAnchor, constant: 10),
-                storyTipView.heightAnchor.constraint(equalToConstant: 46)
-            ])            
-        }
-        
         NSLayoutConstraint.activate([
             storyBottomView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
             contentView.igRightAnchor.constraint(equalTo: storyBottomView.igRightAnchor),
@@ -243,16 +273,16 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             storyBottomView.heightAnchor.constraint(equalToConstant: 44 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0))
         ])
         
-        if !PurchaseManager.inSubscription, isGhost {
-            NSLayoutConstraint.activate([
-                storyBlurView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
-                contentView.igRightAnchor.constraint(equalTo: storyBlurView.igRightAnchor),
-                storyBlurView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
-                contentView.bottomAnchor.constraint(equalTo: storyBlurView.bottomAnchor),
-                storyBlurView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.0),
-                storyBlurView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1.0)
-            ])
-        }
+//        if isGhost {
+//            NSLayoutConstraint.activate([
+//                storyBlurView.igLeftAnchor.constraint(equalTo: contentView.igLeftAnchor),
+//                contentView.igRightAnchor.constraint(equalTo: storyBlurView.igRightAnchor),
+//                storyBlurView.igTopAnchor.constraint(equalTo: contentView.igTopAnchor),
+//                contentView.bottomAnchor.constraint(equalTo: storyBlurView.bottomAnchor),
+//                storyBlurView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.0),
+//                storyBlurView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1.0)
+//            ])
+//        }
         
     }
     private func createSnapView() -> UIImageView {

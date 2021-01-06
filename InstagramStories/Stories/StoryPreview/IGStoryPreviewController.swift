@@ -128,15 +128,11 @@ final class IGStoryPreviewController: UIViewController, UIGestureRecognizerDeleg
         isTransitioning = true
         _view.snapsCollectionView.collectionViewLayout.invalidateLayout()
     }
-    
-    let isGhost: Bool
-    
-    init(layout:IGLayoutType = .cubic,stories: [IGStory],handPickedStoryIndex: Int, handPickedSnapIndex: Int = 0, isGhost: Bool = false) {
+    init(layout:IGLayoutType = .cubic,stories: [IGStory],handPickedStoryIndex: Int, handPickedSnapIndex: Int = 0) {
         self.layoutType = layout
         self.stories = stories
         self.handPickedStoryIndex = handPickedStoryIndex
         self.handPickedSnapIndex = handPickedSnapIndex
-        self.isGhost = isGhost && RemoteRelay.default.localConfig.wonderful
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder aDecoder: NSCoder) {
@@ -174,7 +170,6 @@ extension IGStoryPreviewController:UICollectionViewDataSource {
             fatalError()
         }
         let story = viewModel?.cellForItemAtIndexPath(indexPath)
-        cell.isGhost = isGhost
         cell.story = story
         cell.delegate = self
         currentIndexPath = indexPath
