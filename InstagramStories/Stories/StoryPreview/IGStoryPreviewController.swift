@@ -97,7 +97,8 @@ final class IGStoryPreviewController: UIViewController, UIGestureRecognizerDeleg
 //            IGAppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 //        }
         if !executeOnce {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self._view.snapsCollectionView.delegate = self
                 self._view.snapsCollectionView.dataSource = self
                 let indexPath = IndexPath(item: self.handPickedStoryIndex, section: 0)
