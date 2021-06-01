@@ -62,10 +62,11 @@ final class IGStoryPreviewHeaderView: UIView {
     
     let forever = LoadingButton()
         .hidden()
+        .title(NSLocalizedString("＋Follow", comment: ""))
         .titleColor(.white)
-        .font(12)
-        .cornerRadius(4)
-        .backgroundColor(UIColor.white.withAlphaComponent(0.3))
+        .font(11, .ProductSansLight)
+        .cornerRadius(6)
+        .backgroundColor(UIColor.black.withAlphaComponent(0.2))
 
     public var getProgressView: UIView {
         if let progressView = self.progressView {
@@ -161,9 +162,9 @@ final class IGStoryPreviewHeaderView: UIView {
             forever.hideLoading()
             if foreverIng {
                 forever.title(requestIng ? NSLocalizedString("Requested", comment: "") :
-                                NSLocalizedString("Unfollow", comment: ""))
+                                NSLocalizedString("× Unfollow", comment: ""))
             } else {
-                forever.title(NSLocalizedString("Follow", comment: ""))
+                forever.title(NSLocalizedString("＋ Follow", comment: ""))
             }
         }
     }
