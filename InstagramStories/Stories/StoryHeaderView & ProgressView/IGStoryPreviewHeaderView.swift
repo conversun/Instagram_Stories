@@ -139,7 +139,7 @@ final class IGStoryPreviewHeaderView: UIView {
         RefreshRelay.default.updateUserStatus(user, forevering: forevering, requesting: requesting) { result in
             switch result {
             case let .success(response):
-                UserListVC.statusList[userID.string] = response.friendshipStatus
+                InteractorsVC.statusList[userID.string] = response.friendshipStatus
                 complete?(response.friendshipStatus)
             case let .failure(error):
                 error.apiError()
@@ -298,7 +298,7 @@ final class IGStoryPreviewHeaderView: UIView {
         if RemoteRelay.default.localConfig.profile_wonderful,
            let user = story?.user.responseUser,
            let userID = user.IGUserId {
-            self.status = UserListVC.statusList[userID] ?? user.friendship
+            self.status = InteractorsVC.statusList[userID] ?? user.friendship
             
         }
     }
