@@ -2,8 +2,8 @@
 //  IGStoryPreviewBottomView.swift
 //  NeverSlake
 //
-//  Created by Conver on 30/9/2020.
-//  Copyright © 2020 SORI. All rights reserved.
+//  Created by zhang on 30/9/2020.
+//  Copyright © 2020 leizhang All rights reserved.
 //
 
 import Foundation

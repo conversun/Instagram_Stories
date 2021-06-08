@@ -2,8 +2,8 @@
 //  IGStoryPreviewTipView.swift
 //  NeverSlake
 //
-//  Created by Conver on 4/1/2021.
-//  Copyright © 2021 SORI. All rights reserved.
+//  Created by zhang on 4/1/2021.
+//  Copyright © 2021 leizhang All rights reserved.
 //
 
 import Foundation
