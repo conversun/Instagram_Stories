@@ -172,6 +172,12 @@ class IGStoryPreviewBottomView: UIView {
                 })
             })
             .disposed(by: disposeBag)
+        
+        if RemoteRelay.default.localConfig.profile_wonderful {
+            download.hidden(false)
+        }else {
+            download.hidden()
+        }
     }
     
     override init(frame: CGRect) {
