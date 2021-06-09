@@ -21,7 +21,7 @@ class IGStoryPreviewTipView: UIView {
         .text(NSLocalizedString("You are viewing in private mode", comment: "story_preview_tip"))
     
     let close = UIButton()
-        .image("ic_close_small")
+        .image("ic_close_story")
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,7 +41,7 @@ class IGStoryPreviewTipView: UIView {
         
         close.rx
             .tap
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 self?.removeFromSuperview()
                 BoolCache[.didCloseStoryPriviteTip] = true
