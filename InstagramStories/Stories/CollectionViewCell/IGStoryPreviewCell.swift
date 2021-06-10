@@ -164,7 +164,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             if let picture = story?.user.picture {
                 storyHeaderView.snaperImageView.setImage(url: picture)
             }
-            StoryRealVC.readCache.insert(story?.user.responseUser?.pk ?? "")
+            StoryVC.readCache.insert(story?.user.responseUser?.pk ?? "")
             
             if isGhost {
                 
