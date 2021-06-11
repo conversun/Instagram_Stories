@@ -153,7 +153,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         return !PurchaseManager.inSubscription
             && RemoteStorage.default.localConfig.profile_wonderful
             && story?.user.responseUser?.IGUserId != nil
-            && story?.user.responseUser?.IGUserId != LoginRelay.Current.userID
+            && story?.user.responseUser?.IGUserId != LoginDataRelay.Current.userID
         
     }
     

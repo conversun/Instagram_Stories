@@ -29,7 +29,7 @@ final class IGStoryPreviewHeaderView: UIView {
             
             forever.show(RemoteStorage.default.localConfig.profile_wonderful
                             && story?.user.responseUser?.IGUserId != nil
-                            && story?.user.responseUser?.IGUserId != LoginRelay.Current.userID)
+                            && story?.user.responseUser?.IGUserId != LoginDataRelay.Current.userID)
         }
     }
     fileprivate var progressView: UIView?
