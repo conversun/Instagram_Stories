@@ -136,7 +136,7 @@ final class IGStoryPreviewHeaderView: UIView {
                           complete: ((Friendship?) -> Void)? = nil)
     {
         guard let userID = user.IGUserId?.int else { return }
-        RefreshRelay.default.updateUserStatus(user, forevering: forevering, requesting: requesting) { result in
+        RefreshDataRelay.default.updateUserStatus(user, forevering: forevering, requesting: requesting) { result in
             switch result {
             case let .success(response):
                 InteractorsVC.statusList[userID.string] = response.friendshipStatus
