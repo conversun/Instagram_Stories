@@ -87,7 +87,7 @@ final class IGStoryPreviewController: UIViewController, UIGestureRecognizerDeleg
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        Events.ig_event_page.event(page_name: "StoryPreview")
+        UserEvents.profile_event_page.userEvent(page_name: "StoryPreview")
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
