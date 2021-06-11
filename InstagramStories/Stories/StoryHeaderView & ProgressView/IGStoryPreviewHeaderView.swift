@@ -112,7 +112,7 @@ final class IGStoryPreviewHeaderView: UIView {
     @objc
     func leftControlAction() {
         if let user = story?.user.responseUser {
-            let vc = UserDetailVC(user, false)
+            let vc = UserInfomationDetailVC(user, false)
             UIApplication.rootController?.visibleVC?.dismiss(animated: true, completion: {
                 UIApplication.rootController?.visibleVC?.present(vc.withNavigation())
             })
