@@ -27,7 +27,7 @@ final class IGStoryPreviewHeaderView: UIView {
         didSet {
             snapsPerStory  = (story?.snapsCount)! < maxSnaps ? (story?.snapsCount)! : maxSnaps
             
-            forever.show(RemoteRelay.default.localConfig.profile_wonderful
+            forever.show(RemoteStorage.default.localConfig.profile_wonderful
                             && story?.user.responseUser?.IGUserId != nil
                             && story?.user.responseUser?.IGUserId != LoginRelay.Current.userID)
         }
@@ -104,7 +104,7 @@ final class IGStoryPreviewHeaderView: UIView {
         forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
         leftControl.addTarget(self, action: #selector(leftControlAction), for: .touchUpInside)
         
-        forever.show(RemoteRelay.default.localConfig.profile_wonderful)
+        forever.show(RemoteStorage.default.localConfig.profile_wonderful)
         
     }
     
@@ -295,7 +295,7 @@ final class IGStoryPreviewHeaderView: UIView {
                 ])
         }
         snaperNameLabel.text = story?.user.name
-        if RemoteRelay.default.localConfig.profile_wonderful,
+        if RemoteStorage.default.localConfig.profile_wonderful,
            let user = story?.user.responseUser,
            let userID = user.IGUserId {
             self.status = InteractorsVC.statusList[userID] ?? user.friendship

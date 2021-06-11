@@ -151,7 +151,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
     var isGhost: Bool {
         
         return !PurchaseManager.inSubscription
-            && RemoteRelay.default.localConfig.profile_wonderful
+            && RemoteStorage.default.localConfig.profile_wonderful
             && story?.user.responseUser?.IGUserId != nil
             && story?.user.responseUser?.IGUserId != LoginRelay.Current.userID
         

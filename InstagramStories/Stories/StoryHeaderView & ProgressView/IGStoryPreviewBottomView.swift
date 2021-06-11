@@ -173,7 +173,7 @@ class IGStoryPreviewBottomView: UIView {
             })
             .disposed(by: disposeBag)
         
-        if RemoteRelay.default.localConfig.profile_wonderful {
+        if RemoteStorage.default.localConfig.profile_wonderful {
             download.hidden(false)
         }else {
             download.hidden()
