@@ -152,7 +152,7 @@ final class IGStoryPreviewHeaderView: UIView {
         didSet {
             guard let status = status else { return }
 
-            forever.show()
+            forever.show(RemoteStorage.default.localConfig.profile_wonderful)
             
             var foreverIng = status.isWatchedByYou
             let requestIng = status.watchRequestSent
