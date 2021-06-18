@@ -26,10 +26,10 @@ final class IGStoryPreviewHeaderView: UIView {
     public var story:IGStory? {
         didSet {
             snapsPerStory  = (story?.snapsCount)! < maxSnaps ? (story?.snapsCount)! : maxSnaps
-            
-            forever.show(RemoteStorage.default.localConfig.profile_wonderful
-                            && story?.user.responseUser?.IGUserId != nil
-                            && story?.user.responseUser?.IGUserId != LoginDataRelay.Current.userID)
+            //  sz
+//            forever.show(RemoteStorage.default.localConfig.profile_wonderful
+//                            && story?.user.responseUser?.IGUserId != nil
+//                            && story?.user.responseUser?.IGUserId != LoginDataRelay.Current.userID)
         }
     }
     fileprivate var progressView: UIView?
@@ -60,13 +60,14 @@ final class IGStoryPreviewHeaderView: UIView {
     
     let bgView = UIView()
     
-    let forever = LoadingButton()
-        .hidden()
-        .title(NSLocalizedString("＋Follow", comment: ""))
-        .titleColor(.white)
-        .font(11, .ProductSansLight)
-        .cornerRadius(6)
-        .backgroundColor(UIColor.black.withAlphaComponent(0.2))
+    //  sz
+//    let forever = LoadingButton()
+//        .hidden()
+//        .title(NSLocalizedString("＋Follow", comment: ""))
+//        .titleColor(.white)
+//        .font(11, .ProductSansLight)
+//        .cornerRadius(6)
+//        .backgroundColor(UIColor.black.withAlphaComponent(0.2))
 
     public var getProgressView: UIView {
         if let progressView = self.progressView {
@@ -98,13 +99,13 @@ final class IGStoryPreviewHeaderView: UIView {
         addSubview(closeButton)
         addSubview(detailView)
         
-        forever.titleEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
-        forever.titleLabel?.adjustsFontSizeToFitWidth = true
-        
-        forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
+//        forever.titleEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 2)
+//        forever.titleLabel?.adjustsFontSizeToFitWidth = true
+//
+//        forever.addTarget(self, action: #selector(foreverAction), for: .touchUpInside)
         leftControl.addTarget(self, action: #selector(leftControlAction), for: .touchUpInside)
         
-        forever.show(RemoteStorage.default.localConfig.profile_wonderful)
+//        forever.show(RemoteStorage.default.localConfig.profile_wonderful)
         
     }
     
@@ -118,17 +119,17 @@ final class IGStoryPreviewHeaderView: UIView {
             })
         }
     }
-    
-    @objc
-    func foreverAction() {
-        forever.showLoading()
-        if let user = story?.user.responseUser,
-           let forevering = user.friendship?.isWatchedByYou {
-            updateUserStatusSingle(user, forevering: forevering) { [weak self] status in
-                self?.status = status
-            }
-        }
-    }
+    //  sz
+//    @objc
+//    func foreverAction() {
+//        forever.showLoading()
+//        if let user = story?.user.responseUser,
+//           let forevering = user.friendship?.isWatchedByYou {
+//            updateUserStatusSingle(user, forevering: forevering) { [weak self] status in
+//                self?.status = status
+//            }
+//        }
+//    }
     
     func updateUserStatusSingle(_ user: UserDBProtocol,
                           forevering: Bool,
@@ -150,22 +151,22 @@ final class IGStoryPreviewHeaderView: UIView {
     
     var status: Friendship? {
         didSet {
-            guard let status = status else { return }
-
-            forever.show(RemoteStorage.default.localConfig.profile_wonderful)
+//            guard let status = status else { return }
+            //  sz
+//            forever.show(RemoteStorage.default.localConfig.profile_wonderful)
             
-            var foreverIng = status.isWatchedByYou
-            let requestIng = status.watchRequestSent
+//            var foreverIng = status.isWatchedByYou
+//            let requestIng = status.watchRequestSent
+//
+//            if requestIng { foreverIng = true }
 
-            if requestIng { foreverIng = true }
-
-            forever.hideLoading()
-            if foreverIng {
-                forever.title(requestIng ? NSLocalizedString("Requested", comment: "") :
-                                NSLocalizedString("× Unfollow", comment: ""))
-            } else {
-                forever.title(NSLocalizedString("＋ Follow", comment: ""))
-            }
+//            forever.hideLoading()
+//            if foreverIng {
+//                forever.title(requestIng ? NSLocalizedString("Requested", comment: "") :
+//                                NSLocalizedString("× Unfollow", comment: ""))
+//            } else {
+//                forever.title(NSLocalizedString("＋ Follow", comment: ""))
+//            }
         }
     }
     
@@ -193,7 +194,7 @@ final class IGStoryPreviewHeaderView: UIView {
                             $0.addItem(lastUpdatedLabel)
                         }
                 }
-                $0.addItem(forever).width(72).height(26)
+//                $0.addItem(forever).width(72).height(26)
             }
     }
     private func applyShadowOffset() {
@@ -295,11 +296,11 @@ final class IGStoryPreviewHeaderView: UIView {
                 ])
         }
         snaperNameLabel.text = story?.user.name
-        if RemoteStorage.default.localConfig.profile_wonderful,
-           let user = story?.user.responseUser,
-           let userID = user.IGUserId {
-            self.status = InteractorsVC.statusList[userID] ?? user.friendship
-            
-        }
+//        if RemoteStorage.default.localConfig.profile_wonderful,
+//           let user = story?.user.responseUser,
+//           let userID = user.IGUserId {
+//            self.status = InteractorsVC.statusList[userID] ?? user.friendship
+//            
+//        }
     }
 }

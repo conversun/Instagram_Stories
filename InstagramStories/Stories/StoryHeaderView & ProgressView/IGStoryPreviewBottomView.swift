@@ -19,9 +19,11 @@ class IGStoryPreviewBottomView: UIView {
     var disposeBag = DisposeBag()
     
     var needPauseBlock: ((Bool) -> Void)?
+    //  sz
+//    let download = UIButton()
+//        .image("ic_download_story")
     
-    let download = UIButton()
-        .image("ic_download_story")
+    
 //    let downloadVip = UIImageView()
 //        .image("ic_pro_color")
 //        .isUserInteractionEnabled(false)
@@ -104,86 +106,87 @@ class IGStoryPreviewBottomView: UIView {
 //                }
 //            })
 //            .disposed(by: disposeBag)
+        //  sz
+//        download.rx
+//            .tap
+//            .bind(onNext: { [weak self] in
+//                guard let `self` = self else { return }
+//                guard PurchaseManager.default.checkBoost(source: "StoryPreview-Download") else { return }
+//                guard let url = self.snap?.url else { return }
+//
+//                self.needPauseBlock?(true)
+//                UIApplication.rootController?.visibleVC?.photoPermission(block: { allow in
+//                    guard allow else {
+//                        self.needPauseBlock?(false)
+//                        return
+//                    }
+//
+//                    switch self.snap?.kind {
+//                    case .image:
+//                        guard let url = url.url else { return }
+//                        HUD.show()
+//                        KingfisherManager.shared.retrieveImage(with: ImageResource(downloadURL: url)) { result in
+//                            switch result {
+//                            case let .success(response):
+//                                PHPhotoLibrary.shared().performChanges({
+//                                    PHAssetChangeRequest.creationRequestForAsset(from: response.image)
+//                                }) { success, _ in
+//                                    self.needPauseBlock?(false)
+//                                    DispatchQueue.main.async {
+//                                        if success {
+//                                            HUD.success(NSLocalizedString("Successfully saved", comment: ""))
+//                                        } else {
+//                                            HUD.error(NSLocalizedString("Save failed", comment: ""))
+//                                        }
+//                                    }
+//                                }
+//                            case let .failure(error):
+//                                self.needPauseBlock?(false)
+//                                HUD.error(error.localizedDescription)
+//                            }
+//                        }
+//                    case .video:
+//                        HUD.show()
+//                        IGVideoCacheManager.shared.getFile(for: url) { result in
+//                            switch result {
+//                            case let .success(response):
+//                                PHPhotoLibrary.shared().performChanges({
+//                                    PHAssetChangeRequest
+//                                        .creationRequestForAssetFromVideo(atFileURL: response)
+//                                }) { success, _ in
+//                                    DispatchQueue.main.async {
+//                                        self.needPauseBlock?(false)
+//                                        if success {
+//                                            HUD.success(NSLocalizedString("Successfully saved", comment: ""))
+//                                        } else {
+//                                            HUD.error(NSLocalizedString("Save failed", comment: ""))
+//                                        }
+//                                    }
+//                                }
+//                            case let .failure(error):
+//                                self.needPauseBlock?(false)
+//                                HUD.error(error.localizedDescription)
+//                            }
+//                        }
+//                    default:
+//                        break
+//                    }
+//                })
+//            })
+//            .disposed(by: disposeBag)
         
-        download.rx
-            .tap
-            .bind(onNext: { [weak self] in
-                guard let `self` = self else { return }
-                guard PurchaseManager.default.checkBoost(source: "StoryPreview-Download") else { return }
-                guard let url = self.snap?.url else { return }
-                
-                self.needPauseBlock?(true)
-                UIApplication.rootController?.visibleVC?.photoPermission(block: { allow in
-                    guard allow else {
-                        self.needPauseBlock?(false)
-                        return
-                    }
-                    
-                    switch self.snap?.kind {
-                    case .image:
-                        guard let url = url.url else { return }
-                        HUD.show()
-                        KingfisherManager.shared.retrieveImage(with: ImageResource(downloadURL: url)) { result in
-                            switch result {
-                            case let .success(response):
-                                PHPhotoLibrary.shared().performChanges({
-                                    PHAssetChangeRequest.creationRequestForAsset(from: response.image)
-                                }) { success, _ in
-                                    self.needPauseBlock?(false)
-                                    DispatchQueue.main.async {
-                                        if success {
-                                            HUD.success(NSLocalizedString("Successfully saved", comment: ""))
-                                        } else {
-                                            HUD.error(NSLocalizedString("Save failed", comment: ""))
-                                        }
-                                    }
-                                }
-                            case let .failure(error):
-                                self.needPauseBlock?(false)
-                                HUD.error(error.localizedDescription)
-                            }
-                        }
-                    case .video:
-                        HUD.show()
-                        IGVideoCacheManager.shared.getFile(for: url) { result in
-                            switch result {
-                            case let .success(response):
-                                PHPhotoLibrary.shared().performChanges({
-                                    PHAssetChangeRequest
-                                        .creationRequestForAssetFromVideo(atFileURL: response)
-                                }) { success, _ in
-                                    DispatchQueue.main.async {
-                                        self.needPauseBlock?(false)
-                                        if success {
-                                            HUD.success(NSLocalizedString("Successfully saved", comment: ""))
-                                        } else {
-                                            HUD.error(NSLocalizedString("Save failed", comment: ""))
-                                        }
-                                    }
-                                }
-                            case let .failure(error):
-                                self.needPauseBlock?(false)
-                                HUD.error(error.localizedDescription)
-                            }
-                        }
-                    default:
-                        break
-                    }
-                })
-            })
-            .disposed(by: disposeBag)
-        
-        if RemoteStorage.default.localConfig.profile_wonderful {
-            download.hidden(false)
-        }else {
-            download.hidden()
-        }
+//        if RemoteStorage.default.localConfig.profile_wonderful {
+//            download.hidden(false)
+//        }else {
+//            download.hidden()
+//        }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
 //        [bgView, download, share]
-        [bgView, download]
+//        [bgView, download]   //  sz
+        [bgView]
             .forEach { $0.adhere(toSuperview: self) }
         observer()
         
@@ -195,7 +198,8 @@ class IGStoryPreviewBottomView: UIView {
         bgView.pin.left().right().bottom().height(44 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0))
         
 //        share.pin.right(8).bottom(8 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0)).size(44)
-        download.pin.right(8).bottom(8 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0)).size(44)
+        //  sz
+//        download.pin.right(8).bottom(8 + (UIApplication.rootController?.rootVC?.view.safeArea.bottom ?? 0)).size(44)
 //        download.pin.before(of: share, aligned: .center).size(44).marginRight(8)
 //        downloadVip.pin.sizeToFit().before(of: share, aligned: .top).marginRight(-6)
         
