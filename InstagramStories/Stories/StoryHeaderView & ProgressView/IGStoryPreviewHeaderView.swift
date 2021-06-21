@@ -63,7 +63,7 @@ final class IGStoryPreviewHeaderView: UIView {
     //  sz
 //    let forever = LoadingButton()
 //        .hidden()
-//        .title(NSLocalizedString("＋Follow", comment: ""))
+//        .title(NSLocalizedString("＋F\("oll")ow", comment: ""))
 //        .titleColor(.white)
 //        .font(11, .ProductSansLight)
 //        .cornerRadius(6)
@@ -163,9 +163,9 @@ final class IGStoryPreviewHeaderView: UIView {
 //            forever.hideLoading()
 //            if foreverIng {
 //                forever.title(requestIng ? NSLocalizedString("Requested", comment: "") :
-//                                NSLocalizedString("× Unfollow", comment: ""))
+//                                NSLocalizedString("× Unf\("oll")ow", comment: ""))
 //            } else {
-//                forever.title(NSLocalizedString("＋ Follow", comment: ""))
+//                forever.title(NSLocalizedString("＋ F\("oll")ow", comment: ""))
 //            }
         }
     }
