@@ -54,7 +54,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
     }()
     
     private lazy var storyBlurView: OpaqueLockView = {
-        let v = OpaqueLockView(.ghostStory, source: "StoryPreview-GhostView")
+        let v = OpaqueLockView(.gsStory, source: "StoryPreview-Gho\("stVi")ew")
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -148,7 +148,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
         }
     }
     
-    var isGhost: Bool {
+    var isGS: Bool {
         
         return !PurchaseManager.inSubscription
             //  sz
@@ -167,7 +167,7 @@ final class IGStoryPreviewCell: UICollectionViewCell, UIScrollViewDelegate {
             }
 //            StoryVC.readCache.insert(story?.user.responseUser?.pk ?? "")
             
-            if isGhost {
+            if isGS {
                 
                 storyBlurView.purchaseDidSelect = { source in
                     App.topVC()?.dismiss(animated: true, completion: {
